@@ -22,7 +22,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<HomeScreen />} />
-          <Route path="/bible/:ref/" element={<BookScreen />} />
+          <Route path="/bible/:ref" element={<BookScreen />} />
           <Route path="/search" element={<SearchScreen />} />
         </Routes>
       </div>
