@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import BibleContextProvider from "./context/BibleContext";
 import UIContextProvider from "./context/UIContext";
-import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.css"
 import "./index.css";
