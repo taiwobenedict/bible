@@ -4,6 +4,7 @@ import BookScreen from "./screens/BookScreen";
 import SearchScreen from "./screens/SearchScreen";
 import MenuBar from "./components/MenuBar";
 import MenuModal from "./components/MenuModal";
+import PageNotFound from "./screens/PageNotFound";
 
 
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/bible/:ref" element={<BookScreen />} />
           <Route path="/search" element={<SearchScreen />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
       <footer className="p-1 text-center">
