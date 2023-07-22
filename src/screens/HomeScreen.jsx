@@ -1,14 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { bibleContext } from "../context/BibleContext";
 import { UIContext } from "../context/UIContext";
 
 function HomeScreen() {
   const { upLoadModal } = useContext(bibleContext)
-  const { displayModal } = useContext(UIContext)
+  const { displayModal, changeScreen } = useContext(UIContext)
 
+  
+	useEffect(()=> {
+		changeScreen('home')
+		// eslint-disable-next-line 
+	},[])
+	  
 
   function handleClick (e) {
-	
 	if (e.target.id === 'old') {
 		upLoadModal({type:"OLD_TESTAMENT"})
 	} else if (e.target.id ==='new') {
@@ -23,7 +28,7 @@ function HomeScreen() {
 		<div className="container">
 
 			{/* Select Book */}
-			<div className="custom-card ">
+			<div className="custom-card  my-4">
 				<h4 className="text-center">SELECT BOOK TO READ</h4>
 				<div className="d-flex justify-content-center align-items-center">
 					<div className="sec-bg m-2 p-1 btn" onClick={handleClick}>
@@ -38,8 +43,8 @@ function HomeScreen() {
 			
 			{/* Today's Verse */}
 			<div className="today-verse">
-				<h4 className="custom-card text-center">TODAY'S VERSE</h4>
-				<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere provident fugit adipisci, unde ex laboriosam.</p>
+				<h4 className="custom-card text-center mb-1">TODAY'S VERSE</h4>
+				<p className="p-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere provident fugit adipisci, unde ex laboriosam.</p>
 			</div>
 
 			{/* Daily Reading */}

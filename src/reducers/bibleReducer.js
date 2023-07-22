@@ -6,32 +6,55 @@ function createArray(N) {
 
 function BibleReducer(state, action) {
   switch (action.type) {
-    case "NEW_TESTAMENT":
-      return { ...state, data: action.payload, modalOnDisplay: "BOOK" };
+    case "FETCH_BOOK":
+      const book = action.payload
+      const bookChapter = book.verses[0].chapter
+      const verses = createArray(book.verses.length)
+      const bookName = book.verses[0].book_name
+      const reference = book.reference
 
-    case "OLD_TESTAMENT":
-      return { ...state, data: action.payload, modalOnDisplay: "BOOK" };
+      let bookChapters = state.books.find((bible) => bible.book === bookName)
+      bookChapters = createArray(bookChapters.chapters)
+     
+      
+      return { 
+        ...state,
+        book: book.verses,
+        chapter: bookChapter,
+        verses,
+        bookName,
+        reference,
+        loading: false,
+        version: book.translation_id,
+        chapters: bookChapters,
+        data: verses,
+        modalOnDisplay: 'VERSES'
 
+      }
+    
     case "ALL":
+    case "NEW_TESTAMENT":
+    case "OLD_TESTAMENT":
       return { ...state, data: action.payload, modalOnDisplay: "BOOK" };
 
     case "BOOK":
       const incomingBook = action.payload;
-      const { chapters } = state.books.find((bible) => bible.book === incomingBook);
-      const chaptersArray = createArray(chapters)
-      return { ...state, data: chaptersArray, modalOnDisplay: "CHAPTER" , chapter: chaptersArray, bookName: incomingBook};
+      let { chapters } = state.books.find((bible) => bible.book === incomingBook);
+      chapters = createArray(chapters)
+      return { ...state, data: chapters, modalOnDisplay: "CHAPTER" , chapters , bookName: incomingBook};
 
+      // Navigation Buttons
     case "CHAPTER": 
-      return {...state, data: state.chapter, modalOnDisplay: 'CHAPTER'}
-    
-    case "VERSE":
-      return { ...state, verses: state.verses, modalOnDisplay: 'VERSES' };
-      
-    case "LOAD_BOOK":
-        const book = action.payload
-        const versesArray = createArray(book.verses.length)
-        return {...state, verses:versesArray, book, data: versesArray, modalOnDisplay: "VERSES", loading: false}
+      const {chapter} = action.payload
+      return {...state, data: state.chapters, modalOnDisplay: 'CHAPTER', chapter}
 
+    case "VERSE":
+      return { ...state, data: state.verses, modalOnDisplay: 'VERSES' };
+      
+    case "FORWARD":
+    case "BACKWARD":
+      return { ...state , chapter: action.payload, loading: true }
+   
     default:
       return state;
   }

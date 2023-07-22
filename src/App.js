@@ -26,7 +26,7 @@ function App() {
           <Route path="/search" element={<SearchScreen />} />
         </Routes>
       </div>
-      <footer className="p-1 text-center" style={{zIndex: 1, position:"relative"}}>
+      <footer className="p-1 text-center">
         &copy;Copyright, Taiwo {date.getFullYear()}
       </footer>
     </>

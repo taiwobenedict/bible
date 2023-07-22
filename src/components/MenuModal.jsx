@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { bibleContext } from "../context/BibleContext";
 import { UIContext } from "../context/UIContext";
@@ -7,10 +7,8 @@ import { Link } from "react-scroll";
 function MenuModal() {
   const { data, modalOnDisplay, upLoadModal, bookName ,getBook} = useContext(bibleContext);
   const { showModal, displayModal, changeScreen } = useContext(UIContext)
-  const [chapt, setChapt ] = useState(1)
   const navigate = useNavigate()  
 
-  
 
 
   function handleReference (e) {
@@ -22,19 +20,14 @@ function MenuModal() {
     } 
     // CHAPTER EVENT
     else if (e.target.id === "chapter") {
-      setChapt(value)
-      upLoadModal({type:"CHAPTER", value: {book:bookName, chapter:value}})
-      getBook({book:bookName, chapter:value})
+      getBook({book: bookName, chapter: value})
       changeScreen('book')
-      navigate(`/bible/${bookName}${value}`)
+      navigate(`/bible/${bookName.replace(/\s/g, '')}${value}`)
 
     } 
     // VERSE EVENT
     else {
-      upLoadModal({type:'VERSE', value})
       displayModal()
-      changeScreen('book')
-      navigate(`/bible/${bookName.replace(/\s/g, '')}${chapt}:${value}`)
     }
   }
 
@@ -45,8 +38,10 @@ function MenuModal() {
       <div className="container">
         <div className=" modal-container custom-card">
           <div className="d-flex mb-2 pb-2 justify-content-between align-items-center border-bottom">
+              {/* Modal's Name */}
             <h4 className="font-weight-bold ">{modalOnDisplay}</h4>
-            <i className="fa fa-times fa-2x" onClick={()=> displayModal()}></i>
+              {/* Close Modal */}
+              <i className="fa fa-times fa-2x" onClick={()=> displayModal()}></i>
           </div>
           <div className="modal-items">
             {modalOnDisplay === "BOOK"
