@@ -61,7 +61,7 @@ function MenuModal() {
                     to={`verse${dataValue}`}
                     spy={true}
                     smooth={true}
-                    offset={-70}
+                    offset={-112}
                     duration={1000}
                     key={i}
                     className="modal-item sec-color btn"
