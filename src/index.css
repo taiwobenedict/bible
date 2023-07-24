@@ -107,6 +107,11 @@ body::before {
   background-color: var(--sec-color);
 }
 
+.custom-bg {
+  backdrop-filter: blur(3px);
+
+}
+
 /* Moda */
 .bible-modal {
   backdrop-filter: blur(3px);
@@ -161,12 +166,8 @@ body::before {
 
 /* Book Navigations */
 .navigations {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width:100%;
-  z-index: 1;
   backdrop-filter: blur(3px);
+  
 }
 
 .round {
@@ -190,6 +191,7 @@ body::before {
   position: sticky;
   top: 0;
   z-index: 1;
+  color: var(--sec-color);
   font-size: 1.6rem;
 }
 
@@ -197,15 +199,19 @@ body::before {
 #menu-bar__home {
   display: flex;
   justify-content: space-between;
-  color: var(--sec-color);
-  backdrop-filter: blur(3px);
-  background-color: rgba(0,0,0,0.3);
 }
 
 
 .search-box {
   flex-grow: 1;
   min-width: 100px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  padding: 5px;
+  background-color: var(--sec-color);
+  color: var(--pri-color);
 }
 
 

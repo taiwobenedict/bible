@@ -1,26 +1,35 @@
 import { useContext, useEffect } from "react";
 import { bibleContext } from "../context/BibleContext";
 import { UIContext } from "../context/UIContext";
-
 function HomeScreen() {
-  const { upLoadModal } = useContext(bibleContext)
+  const { upLoadModal, getBooks, dispatch } = useContext(bibleContext)
   const { displayModal, changeScreen } = useContext(UIContext)
 
   
 	useEffect(()=> {
 		changeScreen('home')
+		
 		// eslint-disable-next-line 
 	},[])
 	  
 
   function handleClick (e) {
+	   // Set loading...
+	   dispatch({
+		type: "LOADING",
+	  });
+
 	if (e.target.id === 'old') {
 		upLoadModal({type:"OLD_TESTAMENT"})
+		
 	} else if (e.target.id ==='new') {
 		upLoadModal({type:"NEW_TESTAMENT"})
 	}
 	displayModal()
+	getBooks()
   }
+
+  
   
   return (
     <div id="home">
@@ -30,7 +39,7 @@ function HomeScreen() {
 			{/* Select Book */}
 			<div className="custom-card  my-4">
 				<h4 className="text-center">SELECT BOOK TO READ</h4>
-				<div className="d-flex justify-content-center align-items-center">
+				<div className="d-flex justify-content-center align-items-center flex-wrap">
 					<div className="sec-bg m-2 p-1 btn" onClick={handleClick}>
 						<h5 className="pri-color" id="old">OLD TESTAMENT</h5>
 					</div>

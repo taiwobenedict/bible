@@ -7,9 +7,7 @@ import { useNavigate } from "react-router-dom";
 export const bibleContext = createContext();
 
 function BibleContextProvider({ children }) {
-  // axios default settings
-  axios.defaults.baseURL = "https://bible-api.com/";
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Initial state
   const bible = {
@@ -17,9 +15,11 @@ function BibleContextProvider({ children }) {
     oldTestament: books.slice(0, 39),
     newTestament: books.slice(39),
     data: [],
-    books,
+    localBooks: books,
+    books: [],
     book: [],
     verses: [],
+    verseTexts: [],
     chapters: [],
     bookName: "Genesis",
     verse: 1,
@@ -27,28 +27,47 @@ function BibleContextProvider({ children }) {
     version: "kjv",
     dailyVerse: {},
     reference: "",
-    loading: true,
+    loading: false,
   };
 
   //  connect to bible reducer to manange bible states
   const [state, dispatch] = useReducer(BibleReducer, bible);
 
-  // Fetch book when chapter in click
-  async function getBook({ book, chapter }) {
-    
-   
+  // axios default settings
+  axios.defaults.baseURL =
+    "https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/";
+  axios.defaults.headers.common["api-key"] = "6ff1c35f02f17ad1275f935aa978e74e";
+
+  async function getBooks() {
     try {
-      const { data } = await axios.get(`${book}${chapter}`);
-      // Dispatch to update the state of the selected book and it's chapter
-      dispatch({ type: "FETCH_BOOK", payload: data });
+      const { data } = await axios.get(`books`);
+      return data.data;
+      
     } catch (error) {
       console.log(error);
     }
   }
- 
-  // function getBook(book, chapter) {
+
+  // Fetch book when chapter in click
+  async function getBook({ book, chapter }) {
+    dispatch({
+      type: "LOADING",
+    });
+
+    try {
+      const { data } = await axios.get(
+        `chapters/${book}.${chapter}?content-type=text`
+      );
+      // Dispatch to update the state of the selected book and it's chapter
+      dispatch({ type: "FETCH_BOOK", payload: data.data });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // function getBook({ book, chapter }) {
   //   const data = JSON.parse(localStorage.getItem("bible"));
-  //   dispatch({ type: "LOAD_BOOK", payload: data });
+  //   dispatch({ type: "FETCH_BOOK", payload: data });
   // }
 
   function changeBibleVersion(version) {
@@ -58,20 +77,21 @@ function BibleContextProvider({ children }) {
     });
   }
 
-  function upLoadModal(data) {
+  async function upLoadModal(data) {
     switch (data.type) {
       // Update Modal with Old, New, or All Testament
       case "NEW_TESTAMENT":
       case "OLD_TESTAMENT":
       case "ALL":
+        const apiBooks = await getBooks();
         dispatch({
           type: data.type,
           payload:
             data.type === "NEW_TESTAMENT"
-              ? state.newTestament
+              ? { localBooks: state.newTestament, apiBooks }
               : data.type === "OLD_TESTAMENT"
-              ? state.oldTestament
-              : state.books,
+              ? { localBooks: state.oldTestament, apiBooks }
+              : { localBooks: state.books, apiBooks },
         });
         break;
 
@@ -89,17 +109,17 @@ function BibleContextProvider({ children }) {
       // Forward or Backward Verse
       case "FORWARD":
       case "BACKWARD":
-        const chpt_num = state.chapters.length
-        const chpt_inc = data.value.chapter
-        if ((chpt_inc <= chpt_num) && (chpt_inc !== 0)){
-        dispatch ({
-          type: data.type,
-          payload: data.value.chapter
-        })
-          getBook({book: state.bookName,chapter: chpt_inc})
-          navigate(`/bible/${state.bookName.replace(/\s/g, '')}${chpt_inc}`)
+        const chpt_num = state.chapters.length;
+        const chpt_inc = data.value.chapter;
+        if (chpt_inc <= chpt_num && chpt_inc !== 0) {
+          dispatch({
+            type: data.type,
+            payload: data.value.chapter,
+          });
+          getBook({ book: state.bookName, chapter: chpt_inc });
+          navigate(`/bible/${state.bookName.replace(/\s/g, "")}${chpt_inc}`);
         }
-        break
+        break;
       default:
         break;
     }
@@ -109,8 +129,10 @@ function BibleContextProvider({ children }) {
     <bibleContext.Provider
       value={{
         ...state,
+        dispatch,
 
         getBook,
+        getBooks,
         changeBibleVersion,
         upLoadModal,
       }}

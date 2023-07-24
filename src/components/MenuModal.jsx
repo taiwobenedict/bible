@@ -5,7 +5,7 @@ import { UIContext } from "../context/UIContext";
 import { Link } from "react-scroll";
 
 function MenuModal() {
-  const { data, modalOnDisplay, upLoadModal, bookName ,getBook} = useContext(bibleContext);
+  const { data, modalOnDisplay, upLoadModal, bookName ,getBook, loading} = useContext(bibleContext);
   const { showModal, displayModal, changeScreen } = useContext(UIContext)
   const navigate = useNavigate()  
 
@@ -31,6 +31,12 @@ function MenuModal() {
     }
   }
 
+  if (loading) return (
+    <div className="spinner-icon">
+      <div className="spinner-border" role="status"><span className="sr-only">Loading</span></div>
+    </div>
+  )
+
   return (
     <div
       className={`bible-modal d-flex justify-content-center align-items-center ${showModal && "show"}`}
@@ -47,7 +53,7 @@ function MenuModal() {
             {modalOnDisplay === "BOOK"
               ? data.map((dataValue, i) => (
                   <div id="book" className="modal-item sec-color btn" key={i} onClick={handleReference}>
-                    {dataValue.book}
+                    {dataValue.name}
                   </div>
                 ))
               : modalOnDisplay === "CHAPTER"
