@@ -52,7 +52,7 @@ function BibleContextProvider({ children }) {
       return data.data;
       
     } catch (error) {
-      alert.show(`${error.message}`,{
+      alert.error(`${error.message}`,{
         onClose: () => dispatch({type: 'STOP_LOADING'})
       })
     }
@@ -71,7 +71,7 @@ function BibleContextProvider({ children }) {
       // Dispatch to update the state of the selected book and it's chapter
       dispatch({ type: "FETCH_BOOK", payload: data.data });
     } catch (error) {
-      alert.show(`${error.message}`,{
+      alert.error(`${error.message}`,{
         onClose: () => dispatch({type: 'STOP_LOADING'})
       })
     }

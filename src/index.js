@@ -11,7 +11,7 @@ import "./index.css";
 
 const options = {
   position: positions.MIDDLE,
-  timeout: 5000,
+  timeout: 6000,
   offset: '30px',
   // you can also just use 'scale'
   transition: transitions.SCALE
