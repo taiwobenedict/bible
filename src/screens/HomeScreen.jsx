@@ -2,8 +2,8 @@ import { useContext, useEffect } from "react";
 import { bibleContext } from "../context/BibleContext";
 import { UIContext } from "../context/UIContext";
 function HomeScreen() {
-  const { upLoadModal, getBooks, dispatch } = useContext(bibleContext)
-  const { displayModal, changeScreen } = useContext(UIContext)
+  const { upLoadModal, dispatch } = useContext(bibleContext)
+  const {changeScreen } = useContext(UIContext)
 
   
 	useEffect(()=> {
@@ -25,8 +25,6 @@ function HomeScreen() {
 	} else if (e.target.id ==='new') {
 		upLoadModal({type:"NEW_TESTAMENT"})
 	}
-	displayModal()
-	getBooks()
   }
 
   

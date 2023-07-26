@@ -38,8 +38,8 @@ function MenuBar() {
         return (
           <div id='menu-bar__book'className='menu-bar container custom-bg '>
            <div className="p-2 flex-wrap d-flex justify-content-between align-items-center px-2">
-            <div>
-              <i className="fa fa-arrow-left-long" onClick={()=> {navigate('/'); changeScreen('home')}}></i>
+            <div className='mr-4'>
+              <i className="fa fa-home" onClick={()=> {navigate('/'); changeScreen('home')}}></i>
               <span className='ml-3'>{reference}</span>
             </div>
 
@@ -61,7 +61,7 @@ function MenuBar() {
             <div id='menu-bar__search' className='menu-bar custom-card'>
               <div className="container-sm">
                 <div className="d-flex justify-content-between align-items-center search-container">
-                  <i className="fa fa-arrow-left-long mr-2" onClick={()=> {navigate('/'); changeScreen('home')}}></i>
+                  <i className="fa fa-home mr-2" onClick={()=> {navigate('/'); changeScreen('home')}}></i>
                   <input type="text" value={inputText} placeholder='Search the scriptures' className='m-1 mr-2 search-box'  onChange={handleChange}/> 
                   <div className="btn sec-bg pri-color">FIND</div>
                 </div>

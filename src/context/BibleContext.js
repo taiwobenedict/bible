@@ -1,13 +1,17 @@
-import { createContext, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 import BibleReducer from "../reducers/bibleReducer";
 import axios from "axios";
 import { books } from "../data/books";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "react-alert";
+import { UIContext } from "./UIContext";
 
 export const bibleContext = createContext();
 
 function BibleContextProvider({ children }) {
   const navigate = useNavigate();
+  const alert = useAlert()
+  const {displayModal} = useContext(UIContext)
 
   // Initial state
   const bible = {
@@ -39,12 +43,18 @@ function BibleContextProvider({ children }) {
   axios.defaults.headers.common["api-key"] = "6ff1c35f02f17ad1275f935aa978e74e";
 
   async function getBooks() {
+    dispatch({
+      type: "LOADING",
+    });
+
     try {
       const { data } = await axios.get(`books`);
       return data.data;
       
     } catch (error) {
-      console.log(error);
+      alert.show(`${error.message}`,{
+        onClose: () => dispatch({type: 'STOP_LOADING'})
+      })
     }
   }
 
@@ -61,7 +71,9 @@ function BibleContextProvider({ children }) {
       // Dispatch to update the state of the selected book and it's chapter
       dispatch({ type: "FETCH_BOOK", payload: data.data });
     } catch (error) {
-      console.log(error);
+      alert.show(`${error.message}`,{
+        onClose: () => dispatch({type: 'STOP_LOADING'})
+      })
     }
   }
 
@@ -84,15 +96,18 @@ function BibleContextProvider({ children }) {
       case "OLD_TESTAMENT":
       case "ALL":
         const apiBooks = await getBooks();
-        dispatch({
-          type: data.type,
-          payload:
-            data.type === "NEW_TESTAMENT"
-              ? { localBooks: state.newTestament, apiBooks }
-              : data.type === "OLD_TESTAMENT"
-              ? { localBooks: state.oldTestament, apiBooks }
-              : { localBooks: state.books, apiBooks },
-        });
+        if (apiBooks) {
+          dispatch({
+            type: data.type,
+            payload:
+              data.type === "NEW_TESTAMENT"
+                ? { localBooks: state.newTestament, apiBooks }
+                : data.type === "OLD_TESTAMENT"
+                ? { localBooks: state.oldTestament, apiBooks }
+                : { localBooks: state.books, apiBooks },
+          });
+          displayModal()
+        }
         break;
 
       // Update Modal with Book, Chapter, or Verse

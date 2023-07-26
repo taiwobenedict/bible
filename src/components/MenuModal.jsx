@@ -24,10 +24,10 @@ function MenuModal() {
       changeScreen('book')
       navigate(`/bible/${bookName.replace(/\s/g, '')}${value}`)
 
-    } 
-    // VERSE EVENT
-    else {
+      // VERSE EVENT
+    }  else if (e.target.id === "verse") {
       displayModal()
+
     }
   }
 
@@ -60,9 +60,10 @@ function MenuModal() {
               ? data.map((dataValue, i) => (
                   <div id="chapter" className="modal-item sec-color btn" key={i} onClick={handleReference}>{dataValue}</div>
                 ))
-                // Return VERSE
+                // Return VERSES
               : data.map((dataValue, i) => (
                   <Link
+                  id="verse"
                   activeClass="active"
                     to={`verse${dataValue}`}
                     spy={true}
@@ -75,7 +76,8 @@ function MenuModal() {
                   >
                     {dataValue}
                   </Link>
-                ))}
+                ))
+              }
           </div>
         </div>
       </div>
