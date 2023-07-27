@@ -103,6 +103,8 @@ function BibleReducer(state, action) {
       return { ...state, loading: true };
     case "STOP_LOADING":
       return { ...state, loading: false };
+    case "SEARCH_RESULT":
+      return { ...state, searchList: action.payload, loading: false}
 
     default:
       return state;

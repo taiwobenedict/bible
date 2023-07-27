@@ -14,7 +14,7 @@ const options = {
   timeout: 6000,
   offset: '30px',
   // you can also just use 'scale'
-  transition: transitions.SCALE
+  transition: transitions.FADE
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

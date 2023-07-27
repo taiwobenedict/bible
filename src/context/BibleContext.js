@@ -5,7 +5,6 @@ import { books } from "../data/books";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { UIContext } from "./UIContext";
-
 export const bibleContext = createContext();
 
 function BibleContextProvider({ children }) {
@@ -32,6 +31,7 @@ function BibleContextProvider({ children }) {
     dailyVerse: {},
     reference: "",
     loading: false,
+    searchList: []
   };
 
   //  connect to bible reducer to manange bible states
@@ -39,7 +39,7 @@ function BibleContextProvider({ children }) {
 
   // axios default settings
   axios.defaults.baseURL =
-    "https://api.scripture.api.bible/v1/bibles/de4e12af7f28f599-01/";
+    "https://api.scripture.api.bible/v1/bibles/9879dbb7cfe39e4d-01/";
   axios.defaults.headers.common["api-key"] = "6ff1c35f02f17ad1275f935aa978e74e";
 
   async function getBooks() {
@@ -47,6 +47,7 @@ function BibleContextProvider({ children }) {
       type: "LOADING",
     });
 
+  
     try {
       const { data } = await axios.get(`books`);
       return data.data;
@@ -82,6 +83,7 @@ function BibleContextProvider({ children }) {
   //   dispatch({ type: "FETCH_BOOK", payload: data });
   // }
 
+  // Change Bible Version
   function changeBibleVersion(version) {
     dispatch({
       type: "CHANGE_BIBLE_VERSION",
@@ -89,6 +91,7 @@ function BibleContextProvider({ children }) {
     });
   }
 
+  // Update Modal
   async function upLoadModal(data) {
     switch (data.type) {
       // Update Modal with Old, New, or All Testament
@@ -140,6 +143,27 @@ function BibleContextProvider({ children }) {
     }
   }
 
+  // Search Bible
+  async function search(keywords) {
+    dispatch({
+      type: "LOADING",
+    });
+
+    try {
+      const {data} = await axios.get(`search?query=${keywords}&sort=relevance&limit=500`)
+      dispatch({
+        type: "SEARCH_RESULT",
+        payload: data.data.verses
+      })
+    }
+    catch (error) {
+      alert.error(`${error.message}`,{
+        onClose: () => dispatch({type: 'STOP_LOADING'})
+      })
+    }
+
+  }
+
   return (
     <bibleContext.Provider
       value={{
@@ -150,6 +174,7 @@ function BibleContextProvider({ children }) {
         getBooks,
         changeBibleVersion,
         upLoadModal,
+        search
       }}
     >
       {children}
